@@ -1,0 +1,48 @@
+@startuml EUC2InformalSequenceDiagramIteration3
+
+skinparam linetype ortho
+'skinparam backgroundColor transparent
+'skinparam handwritten true
+'skinparam monochrome true
+'left to right direction
+skinparam sequenceMessageAlign direction
+hide empty members
+hide empty description
+skinparam classAttributeIconSize 0
+skinparam style strictuml
+autoactivate on
+
+actor "System User" as User
+participant ":LoginGui" as LoginGui
+participant ":AuthenticationController" as AuthenticationController
+participant ":DBMgr" as DBMgr
+participant ":DBAccess" as DBAccess
+participant ":GetUser" as GetUser
+
+User --> LoginGui : <<Click "Login" button>>
+LoginGui --> User : Displays Login Form
+User --> LoginGui : <<Submits UserID and Password>>
+LoginGui -> AuthenticationController : sends credentials
+AuthenticationController -> DBMgr: Request User by UserID
+DBMgr -> DBAccess: calls getX
+DBAccess -> GetUser: calls getX
+GetUser -> DBAccess: return User
+DBAccess -> DBMgr: return User
+DBMgr --> AuthenticationController : return User
+
+alt if user != null
+    AuthenticationController -> AuthenticationController : Verify password
+    
+    alt if user is verified
+        AuthenticationController --> LoginGui : Login successful message
+        LoginGui --> User : Display Welcome Message
+    else else
+        AuthenticationController --> LoginGui : Password incorrect message
+        LoginGui --> User : Display "Incorrect Password"
+    end
+else user == null
+    AuthenticationController --> LoginGui : User not found message
+    LoginGui --> User : Display "User not found"
+end
+
+@enduml

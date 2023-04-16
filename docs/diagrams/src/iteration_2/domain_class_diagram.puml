@@ -1,0 +1,156 @@
+@startuml DomainClassDiagram
+
+'skinparam linetype ortho
+'skinparam backgroundColor transparent
+'skinparam handwritten true
+'skinparam monochrome true
+left to right direction
+skinparam sequenceMessageAlign direction
+hide empty members
+hide empty description
+skinparam classAttributeIconSize 0
+skinparam style strictuml
+
+'DATABASE CLASSES
+
+abstract DBCmd <<Command Pattern>> {
+    +execute(): Object
+    +makeQuery()
+    +processResult()
+    +connectDB()
+    +executeQuery()
+    +disconnectDB()
+}
+
+class GetEvent extends DBCmd {
+    + attribute1:type = defaultValue
+    + attribute2:type
+    - attribute3:type
+    + operation1(params): returnType
+    - operation2(params)
+    - operation3()
+}
+
+class SaveEvent extends DBCmd {
+    + attribute1:type = defaultValue
+    + attribute2:type
+    - attribute3:type
+    + operation1(params): returnType
+    - operation2(params)
+    - operation3()
+}
+
+class DBAccess <<Bridge Pattern>> {
+    +getEvent(): Event
+    +saveEvent(e: Event)
+    +getUser(): User
+    +saveUser(u: User)
+    +getPayment(): Payment
+    +savePayment(p: Payment)
+}
+
+DBCmd -- DBAccess
+
+class DBAccessInterface <<Bridge Pattern>> {
+    +getEvent(): Event
+    +saveEvent(e: Event)
+    +getUser(): User
+    +saveUser(u: User)
+    +getPayment(): Payment
+    +savePayment(Payment p)
+}
+
+DBAccessInterface <|.. DBAccess
+
+class DBMgr <<Singleton>> {
+    +getEvent(): Event
+    +saveEvent(e: Event)
+    +getUser(): User
+    +saveUser(u: User)
+    +getPayment(): Payment
+    +savePayment(p: Payment)
+}
+
+DBMgr o-- DBAccessInterface
+
+
+'AUTHENTICATION
+
+class AuthenticationController {
+    verifyLogin(email: String, password: String)
+    registerUser(emai: String, password: String, type: String)
+    generateTempPassword(email: String)
+    resetPassword(email: String, password: String)
+}
+
+class ResetPasswordGui {
+    +display(result: String)
+}
+
+class LoginGui {
+    +display(result: String)
+}
+
+class CreateAccountGui {
+    +display(result: String)
+}
+
+AuthenticationController o.. ResetPasswordGui
+AuthenticationController o.. LoginGui
+AuthenticationController o.. CreateAccountGui
+
+DBMgr o.. AuthenticationController
+
+'EVENTS
+
+class EventController {
+    +submitEventProposal(name: String,\n\tduration: Duration, location: String,\n\tslogan: String, dateOfEvent: ZonedDateTime,\n\temail: String)
+    +registerEvent(userId: int, eventId: int,\n\teventName: string)
+}
+
+class EventProposalGui {
+    +display(result: String)
+}
+
+class EventRegistrationGui {
+    +display(result: String)
+}
+
+class Event {
+    eventName: String
+    duration: ZonedDateTime
+    location: String
+    slogan: String
+    <<Create>> createEvent(eventName: String,\n\tduration: ZonedDateTime,\n\tlocation: String, slogan: String)
+}
+
+EventController o.. EventProposalGui
+EventController o.. EventRegistrationGui
+EventController o.. Event
+DBMgr o.. EventController
+
+'PAYMENT
+
+class PaymentGui {
+    +display(result: String)
+}
+EventController o.. PaymentGui
+
+class PaymentController {
+    +printPayment(userid: int, transactionId: int)
+    +pay(payment: Payment, userId: int)
+}
+
+PaymentController o.. PaymentGui
+
+class Payment {
+    cardNumber: Sring
+    expiryDate: ZonedDateTime
+    cvv: int
+    <<Create>> createPayment(cardNumber: String,\n\texpiryDate: ZonedDateTime, cvv: int)
+}
+
+PaymentController ..o Payment
+DBMgr o.. PaymentController
+
+@enduml

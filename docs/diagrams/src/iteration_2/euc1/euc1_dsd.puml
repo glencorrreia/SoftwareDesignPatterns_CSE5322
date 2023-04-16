@@ -1,0 +1,42 @@
+@startuml EUC1DesignSequenceDiagramIteration2
+
+skinparam linetype ortho
+'skinparam backgroundColor transparent
+'skinparam handwritten true
+'skinparam monochrome true
+'left to right direction
+skinparam sequenceMessageAlign direction
+hide empty members
+hide empty description
+skinparam classAttributeIconSize 0
+skinparam style strictuml
+
+actor User
+participant ":<<jsp/html>>CreateAccountGui" as CreateAccountGui
+participant ":<<jsp/html>>LoginGui" as LoginGui
+participant ":CreateAccountController" as CreateAccountController
+participant ":DBManager" as DBManager
+participant "user:User(obj indb)" as user
+
+User -> CreateAccountGui : <<email, usertype>>
+CreateAccountGui --> CreateAccountController : checkUserExistsByEmail(e: String)
+CreateAccountController -> DBManager : user := getUserByEmail(e: String): User
+
+alt user == exists
+    CreateAccountController --> CreateAccountGui : user already exists
+    CreateAccountGui --> User : <<error message>>
+else else
+    CreateAccountController -> DBManager : user := createUser(u: userData): User
+    DBManager -> user : user := createUser()
+    CreateAccountController --> CreateAccountGui : message + user object
+
+    alt user != null and message == success
+        CreateAccountGui --> CreateAccountGui : <<email temporary password>>
+        CreateAccountGui -> LoginGui : <<redirect>>
+        LoginGui --> User : Login page
+    else else
+        CreateAccountGui --> User : <<error message>>
+    end
+end
+
+@enduml

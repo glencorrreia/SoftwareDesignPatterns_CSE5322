@@ -1,0 +1,17 @@
+@startuml EUC1DesignSequenceDiagramIteration3
+
+skinparam linetype ortho
+'skinparam backgroundColor transparent
+'skinparam handwritten true
+'skinparam monochrome true
+'left to right direction
+skinparam sequenceMessageAlign direction
+hide empty members
+hide empty description
+skinparam classAttributeIconSize 0
+skinparam style strictuml
+autoactivate on
+
+actor User
+
+@enduml

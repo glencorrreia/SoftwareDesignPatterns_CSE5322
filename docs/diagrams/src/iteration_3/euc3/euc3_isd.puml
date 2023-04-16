@@ -1,0 +1,41 @@
+@startuml EUC3InformalSequenceDiagramIteration3
+
+skinparam linetype ortho
+'skinparam backgroundColor transparent
+'skinparam handwritten true
+'skinparam monochrome true
+'left to right direction
+skinparam sequenceMessageAlign direction
+hide empty members
+hide empty description
+skinparam classAttributeIconSize 0
+skinparam style strictuml
+autoactivate on
+
+actor "Event Organizer" as User
+participant ":EventProposalUI" as EventProposalUI
+participant ":EventProposalController" as EventProposalController
+participant ":DBMgr" as DBMgr
+participant ":DBAccess" as DBAccess
+participant ":DBEvent" as DBEvent
+
+User --> EventProposalUI : <<selects "Create Event Proposal" button>>
+EventProposalUI --> User : Displays event proposal form
+User --> EventProposalUI : <<submits proposal with slogan,\n\ttheme, venue, duration\n\tto the event organizer.>>
+EventProposalUI -> EventProposalController : save event proposal
+EventProposalController -> DBMgr : save details
+DBMgr -> DBAccess : save details
+DBAccess -> DBEvent : save details
+DBEvent --> DBAccess : returns success
+DBAccess --> DBMgr : returns success
+DBMgr --> EventProposalController : returns success
+
+alt if success
+    EventProposalController --> EventProposalUI : returns confirmation message
+    EventProposalUI --> User : Display "Pending Review and Payment Invoice"
+else else
+    EventProposalController --> EventProposalUI : returns failure message
+    EventProposalUI --> User : Display "Submission Failed"
+end
+
+@enduml

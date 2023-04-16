@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" id="WebApp_ID" version="4.0">
+  <display-name>Project</display-name>
+  <welcome-file-list>
+
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+  
+      <servlet>
+        <servlet-name>project</servlet-name>
+        <servlet-class>
+            org.springframework.web.servlet.DispatcherServlet
+        </servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>project</servlet-name>
+        <url-pattern>/registration.jsp</url-pattern>
+        <url-pattern>/login.jsp</url-pattern>
+        <url-pattern>/index.jsp</url-pattern>
+        <url-pattern>/checkuser</url-pattern>
+        <url-pattern>/adduser</url-pattern>
+        <url-pattern>/changepwd</url-pattern>     
+        <url-pattern>/eventorganizer</url-pattern>
+        <url-pattern>/eventProposal</url-pattern>        
+        <url-pattern>/updatepwd</url-pattern>  
+        <url-pattern>/submitEventProposal</url-pattern>
+        <url-pattern>/payment</url-pattern>        
+        <url-pattern>/submitPayment</url-pattern>
+        <url-pattern>/staffhome</url-pattern>
+        <url-pattern>/reviewEvent</url-pattern>
+        <url-pattern>/submitEventReview</url-pattern>
+        <url-pattern>/participanthome</url-pattern>
+        <url-pattern>/registerParticipant</url-pattern>
+    </servlet-mapping>
+  
+</web-app>

@@ -1,0 +1,38 @@
+@startuml EUC4InformalSequenceDiagramIteration3
+
+skinparam linetype ortho
+'skinparam backgroundColor transparent
+'skinparam handwritten true
+'skinparam monochrome true
+'left to right direction
+skinparam sequenceMessageAlign direction
+hide empty members
+hide empty description
+skinparam classAttributeIconSize 0
+skinparam style strictuml
+
+actor Participant as User
+participant ":ClientGui" as ClientGui
+participant ":RegisterEventsController" as RegisterEventsController
+participant ":DBMgr" as DBMgr
+participant ":DBAccess" as DBAccess
+participant ":DBRegisterEvent" as DBRegisterEvent
+
+User --> ClientGui : <<submits form with event name,\n\ttheme, slogan, location,\n\tdate, area sq. ft.>>
+ClientGui -> RegisterEventsController : registers event with form data
+RegisterEventsController -> DBMgr : save event
+DBMgr -> DBAccess : save details
+DBAccess -> DBRegisterEvent : save details
+DBRegisterEvent --> DBAccess : returns success
+DBAccess --> DBMgr : returns success
+DBMgr --> RegisterEventsController : returns success
+
+alt if success
+    RegisterEventsController --> ClientGui : returns message "Pending Payment"
+    ClientGui --> User : displays message "Pending Payment"
+else else
+    RegisterEventsController --> ClientGui : returns message "Submission failed"
+    ClientGui --> User : displays message "Submission failed"
+end
+
+@enduml

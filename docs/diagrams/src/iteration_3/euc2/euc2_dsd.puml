@@ -1,0 +1,46 @@
+@startuml EUC2DesignSequenceDiagramIteration3
+
+skinparam linetype ortho
+'skinparam backgroundColor transparent
+'skinparam handwritten true
+'skinparam monochrome true
+'left to right direction
+skinparam sequenceMessageAlign direction
+hide empty members
+hide empty description
+skinparam classAttributeIconSize 0
+skinparam style strictuml
+autoactivate on
+
+actor "System User" as User
+participant ":LoginGui" as LoginGui
+participant ":AuthenticationController" as AuthenticationController
+participant ":DBMgr" as DBMgr
+participant ":DBAccess" as DBAccess
+participant ":GetUser" as GetUser
+
+User --> LoginGui : <<Click "Login" button>>
+LoginGui --> User : Display Login Form
+User --> LoginGui : <<UserID, Password>>
+LoginGui -> AuthenticationController : msg := verifyLogin(userId: String,\n\tpassword: String): String
+AuthenticationController -> DBMgr: user := getUserById(userId: String): User
+DBMgr -> DBAccess: obj := getX(): Object
+DBAccess -> GetUser: obj := getX(): Object
+
+alt if user == null
+    AuthenticationController --> AuthenticationController : msg := "Welcome" : String
+
+else user != null
+    AuthenticationController -> AuthenticationController : isValid := verifyPassword(password: String\n\tuserid: String): boolean
+
+    alt if isValid
+        AuthenticationController --> AuthenticationController : msg := "Welcome" : String
+    else else
+        AuthenticationController --> AuthenticationController : msg := "Invalid User ID/Password" : String
+    end
+    
+end
+
+LoginGui --> User: displays message
+
+@enduml

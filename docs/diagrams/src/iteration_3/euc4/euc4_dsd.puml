@@ -1,0 +1,29 @@
+@startuml EUC4DesignSequenceDiagramIteration3
+
+skinparam linetype ortho
+'skinparam backgroundColor transparent
+'skinparam handwritten true
+'skinparam monochrome true
+'left to right direction
+skinparam sequenceMessageAlign direction
+hide empty members
+hide empty description
+skinparam classAttributeIconSize 0
+skinparam style strictuml
+
+actor Participant as User
+participant ":ClientGui" as ClientGui
+participant ":RegisterEventsController" as RegisterEventsController
+participant ":DBMgr" as DBMgr
+participant ":DBAccess" as DBAccess
+participant ":DBRegisterEvent" as DBRegisterEvent
+
+User --> ClientGui : <<submits form with event name,\n\ttheme, slogan, location,\n\tdate, area sq. ft.>>
+ClientGui -> RegisterEventsController : msg := registerEvent(theme: String,\n\tslogan: String, location: String,\n\tdate: ZonedDateTime,\n\tarea: String): String
+RegisterEventsController -> DBMgr : res := saveEvent(theme: String,\n\tslogan: String, location: String,\n\tdate: ZonedDateTime,\n\tarea: String): boolean
+DBMgr -> DBAccess : res := saveDetails(theme: String,\n\tslogan: String, location: String,\n\tdate: ZonedDateTime,\n\tarea: String): boolean
+DBAccess -> DBRegisterEvent : res := saveDetails(theme: String,\n\tslogan: String, location: String,\n\tdate: ZonedDateTime,\n\tarea: String): boolean
+
+ClientGui --> User : displays message
+
+@enduml

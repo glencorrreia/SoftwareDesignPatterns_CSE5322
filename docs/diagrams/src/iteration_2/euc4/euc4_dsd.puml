@@ -1,0 +1,25 @@
+@startuml EUC4DesignSequenceDiagramIteration2
+
+
+skinparam linetype ortho
+'skinparam backgroundColor transparent
+'skinparam handwritten true
+'skinparam monochrome true
+'left to right direction
+skinparam sequenceMessageAlign direction
+hide empty members
+hide empty description
+skinparam classAttributeIconSize 0
+skinparam style strictuml
+
+actor User
+participant ":ClientGui" as ClientGui
+participant ":Register Events Controller" as RegisterEventsController
+participant ":DBManager" as DBManager
+
+User --> ClientGui : <<Clicks "Register Event" button>>
+ClientGui -> RegisterEventsController : "events := retrieveEventsList() : List"
+RegisterEventsController -> DBManager : "events := getEventsList() : List"
+ClientGui --> User : <<events>>
+
+@enduml

@@ -1,0 +1,27 @@
+@startuml EUC3DesignSequenceDiagramIteration2
+
+
+skinparam linetype ortho
+'skinparam backgroundColor transparent
+'skinparam handwritten true
+'skinparam monochrome true
+'left to right direction
+skinparam sequenceMessageAlign direction
+hide empty members
+hide empty description
+skinparam classAttributeIconSize 0
+skinparam style strictuml
+
+actor "System User" as User
+participant ":EventProposalUI" as EventProposalUI
+participant ":EventProposalController" as EventProposalController
+participant ":DBManager" as DBManager
+
+User --> EventProposalUI : <<Select "Submit Proposal" button>>
+EventProposalUI --> User : Display Event Form
+User --> EventProposalUI : <<Submit Event Form>>
+EventProposalUI -> EventProposalController : registeredMsg := sendProposal\n\t(theme: String, slogan: String,\n\tvenue: String, duration: String,\n\tproposal: String): String
+EventProposalController -> DBManager : success := saveProposal\n\t(theme: String, slogan: String,\n\tvenue: String, duration: String,\n\tproposal: String): boolean
+EventProposalUI --> User : Display "Pending Review and\nPayment Invoice"
+
+@enduml
